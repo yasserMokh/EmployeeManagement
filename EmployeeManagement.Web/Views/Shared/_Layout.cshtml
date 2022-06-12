@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a asp-controller="employee" asp-action="index" class="navbar-brand">
+                <img src="~/images/employees.png" width="30px" height="30px" asp-append-version="true"/>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a asp-controller="employee" asp-action="index" class="nav-link">List</a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="employee" asp-action="create" class="nav-link">Create</a>
+                </li>
+            </ul>
+            </div>
+        </nav>
+        <div>
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    @RenderSection("Scripts", false)
+</body>
+</html>

@@ -1,0 +1,45 @@
+﻿@model EmployeeListViewModel
+@{
+    ViewBag.Title = Model.PageTitle;
+}
+<div class="card-deck">
+    @foreach (var emp in @Model.EmployeeList)
+    {        
+        var photoPath = "~/images/" + (emp.PhotoPath ?? "noimage.jpg");
+            <div class="card m-3">
+                <div class="card-header">
+                    <h3>@emp.Name</h3>
+                </div>
+                <img class="card-img-top imageThumb" src="@photoPath" asp-append-version="true"/>
+                <div class="card-footer text-center">
+                    <a asp-action="details" asp-route-id="@emp.Id" class="btn btn-primary m-1">View</a>
+                    <a asp-action="edit" asp-route-id="@emp.Id" class="btn btn-primary m-1">Edit</a>
+                    <a href="#" class="btn btn-danger m-1">Delete</a>
+                </div>
+            </div>
+    }
+</div>
+
+
+@*<h3>@Model.PageTitle</h3>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in @Model.EmployeeList)
+        {
+            <tr>
+                <td>@emp.Id</td>
+                <td>@emp.Name</td>
+                <td>@emp.Department</td>
+            </tr>
+        }
+
+    </tbody>
+</table>*@
+
