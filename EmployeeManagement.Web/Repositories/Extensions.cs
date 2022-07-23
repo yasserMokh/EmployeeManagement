@@ -12,9 +12,9 @@ namespace EmployeeManagement.Web.Repositories
             return services;
         }
 
-        public static IServiceCollection AddSqlRepositories(this IServiceCollection services)
+        public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            services.AddScoped<IEmployeeRepository, SqlEmployeeRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             return services;
         }
     }

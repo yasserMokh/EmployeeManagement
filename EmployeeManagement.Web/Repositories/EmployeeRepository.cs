@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace EmployeeManagement.Web.Repositories
 {
-    public class SqlEmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _context;
 
-        public SqlEmployeeRepository(AppDbContext context)
+        public EmployeeRepository(AppDbContext context)
         {
             _context = context;
         }

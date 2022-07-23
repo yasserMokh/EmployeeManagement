@@ -31,7 +31,7 @@ namespace EmployeeManagement.Web
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("EmployeeDbConnection")));
             services.AddControllersWithViews();
             //services.AddMockRepositories();
-            services.AddSqlRepositories();
+            services.AddRepositories();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +41,12 @@ namespace EmployeeManagement.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //app.Run(async (context) =>
+            //{
+            //    //await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
+            //    await context.Response.WriteAsync(_configuration["MyKey"]);
+            //});
 
             //app.UseRouting();
 
@@ -56,7 +62,7 @@ namespace EmployeeManagement.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -64,10 +70,8 @@ namespace EmployeeManagement.Web
                     pattern: "{controller=employee}/{action=index}/{id?}");
             });
 
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Halloo");
-            //});
+
         }
     }
 }
+
