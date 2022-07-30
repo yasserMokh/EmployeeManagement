@@ -41,6 +41,12 @@ namespace EmployeeManagement.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                app.UseStatusCodePagesWithReExecute("/Error/{0}");
+
+            }
 
             //app.Run(async (context) =>
             //{
