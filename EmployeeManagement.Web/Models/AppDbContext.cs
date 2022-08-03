@@ -1,9 +1,10 @@
 ﻿using EmployeeManagement.Web.Models.Enums;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Web.Models
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
         {
@@ -13,8 +14,8 @@ namespace EmployeeManagement.Web.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Seed();            
         }
     }
 }

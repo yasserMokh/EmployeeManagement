@@ -1,8 +1,11 @@
 using EmployeeManagement.Web.Models;
 using EmployeeManagement.Web.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +32,12 @@ namespace EmployeeManagement.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_configuration.GetConnectionString("EmployeeDbConnection")));
-            services.AddControllersWithViews();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddControllersWithViews(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
             //services.AddMockRepositories();
             services.AddRepositories();
         }
@@ -67,7 +75,11 @@ namespace EmployeeManagement.Web
 
             app.UseStaticFiles();
 
+            app.UseAuthentication();
+
+
             app.UseRouting();
+           
 
             app.UseEndpoints(endpoints =>
             {
