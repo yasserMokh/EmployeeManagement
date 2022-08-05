@@ -63,16 +63,16 @@ namespace EmployeeManagement.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string redirectUrl)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    if (!string.IsNullOrEmpty(redirectUrl))
+                    if (!string.IsNullOrEmpty(returnUrl))
                     {
-                        return LocalRedirect(redirectUrl);
+                        return LocalRedirect(returnUrl);
                     }
                     return RedirectToAction("index", "employee");
                 }
