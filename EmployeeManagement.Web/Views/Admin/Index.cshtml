@@ -36,9 +36,9 @@ else
                 <h5 class="card-title">@role.Name</h5>
             </div>
             <div class="card-footer">
-                <a asp-controller="admin" asp-action="editrole"
+                <a asp-controller="admin" asp-action="editrole" asp-route-id="@role.Id"
            class="btn btn-primary">Edit</a>
-                <a asp-controller="admin" asp-action="deleterole"
+                <a asp-controller="admin" asp-action="deleterole" asp-route-id="@role.Id"
            class="btn btn-primary">Delete</a>
             </div>
         </div>
