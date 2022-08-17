@@ -29,14 +29,23 @@
                     </li>
                     @if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                     {
-                        <a asp-controller="admin" asp-action="index" class="nav-link">Manage Roles</a>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navBarDropDownMenuLink"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navBarDropDownMenuLink">
+                                <a asp-controller="admin" asp-action="index" class="dropdown-item">Roles</a>
+                                <a asp-controller="admin" asp-action="listusers" class="dropdown-item">Users</a>
+                            </div>
+                        </li>
                     }
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     @if (_signInManager.IsSignedIn(User))
                     {
                         <form mmethod="post" asp-controller="account" asp-action="logout">
-                            <button type="submit"   class="nav-link btn btn-link py-0" style="width:auto">
+                            <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
                                 Logout @User.Identity.Name
                             </button>
                         </form>

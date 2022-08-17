@@ -20,13 +20,12 @@ namespace EmployeeManagement.Web.Controllers
             _userManager = userManager;
         }
 
-
         [HttpGet]
         public IActionResult Index()
         {
             var roles = _roleManager.Roles;
             return View(roles);
-        }
+        }        
 
         [HttpGet]
         public IActionResult CreateRole()
@@ -130,7 +129,6 @@ namespace EmployeeManagement.Web.Controllers
 
         }
 
-
         [HttpPost]
         public async Task<IActionResult> EditUsersInRole(string id, List<UserRoleViewModel> modelUsers)
         {
@@ -164,6 +162,25 @@ namespace EmployeeManagement.Web.Controllers
             return RedirectToAction("editrole", "admin", new { id = id });
 
 
+        }
+
+        [HttpGet]
+        public IActionResult ListUsers()
+        {
+            var users = _userManager.Users;
+            return View(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {   
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            return View();
         }
 
     }

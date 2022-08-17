@@ -40,7 +40,11 @@ namespace EmployeeManagement.Web.Controllers
                 var user = new IdentityUser { UserName = registerUserViewModel.Email, Email = registerUserViewModel.Email };
                 var result = await _userManager.CreateAsync(user, registerUserViewModel.Password);
                 if (result.Succeeded)
-                {
+                {                    
+                    if(_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("listusers", "admin");
+                    }
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("index", "employee");
                 }
