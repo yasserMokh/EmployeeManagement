@@ -223,10 +223,25 @@ namespace EmployeeManagement.Web.Controllers
             return View(userModel);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> DeleteUser(string id)
         {
-            return View();
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("listusers", "admin");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View("ListUsers");
         }
 
     }

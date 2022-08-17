@@ -36,10 +36,13 @@ else
                 <h5 class="card-title">@user.UserName</h5>
             </div>
             <div class="card-footer">
-                <a asp-controller="admin" asp-action="edituser" asp-route-id="@user.Id"
-           class="btn btn-primary">Edit</a>
-                <a asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Id"
-           class="btn btn-primary">Delete</a>
+                <form method="post" asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Id">
+                    <a asp-controller="admin" asp-action="edituser" asp-route-id="@user.Id"
+               class="btn btn-primary">Edit</a>
+                    <button type="submit" class="btn btn-primary">
+                        Delete
+                    </button>
+                </form>
             </div>
         </div>
     }
