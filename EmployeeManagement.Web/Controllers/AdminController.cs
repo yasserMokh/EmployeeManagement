@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagement.Web.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -25,7 +25,7 @@ namespace EmployeeManagement.Web.Controllers
         {
             var roles = _roleManager.Roles;
             return View(roles);
-        }        
+        }
 
         [HttpGet]
         public IActionResult CreateRole()
@@ -90,7 +90,7 @@ namespace EmployeeManagement.Web.Controllers
                 else
                 {
                     role.Name = model.RoleName;
-                    var result= await _roleManager.UpdateAsync(role);
+                    var result = await _roleManager.UpdateAsync(role);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("index", "admin");
@@ -136,11 +136,11 @@ namespace EmployeeManagement.Web.Controllers
             if (role == null)
             {
                 return NotFound();
-            }           
+            }
 
             var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name);
 
-            foreach(var modelUser in modelUsers)
+            foreach (var modelUser in modelUsers)
             {
                 var user = await _userManager.FindByIdAsync(modelUser.UserId);
                 if (usersInRole.Any(u => u.Id == modelUser.UserId))
@@ -156,7 +156,7 @@ namespace EmployeeManagement.Web.Controllers
                     {
                         await _userManager.AddToRoleAsync(user, role.Name);
                     }
-                }               
+                }
             }
 
             return RedirectToAction("editrole", "admin", new { id = id });
@@ -173,8 +173,54 @@ namespace EmployeeManagement.Web.Controllers
 
         [HttpGet]
         public async Task<IActionResult> EditUser(string id)
-        {   
-            return View();
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            var userModel = new EditUserViewModel()
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                Roles = roles,
+                Claims = claims.Select(c => c.Value).ToList()
+            };
+
+            return View(userModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel userModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(userModel.Id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                user.UserName = userModel.UserName;
+
+                user.Email = userModel.Email;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("listusers", "admin");
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return View(userModel);
         }
 
         [HttpGet]
