@@ -39,12 +39,33 @@ else
                 <form method="post" asp-controller="admin" asp-action="deleteuser" asp-route-id="@user.Id">
                     <a asp-controller="admin" asp-action="edituser" asp-route-id="@user.Id"
                class="btn btn-primary">Edit</a>
-                    <button type="submit" class="btn btn-primary">
-                        Delete
-                    </button>
+                    <span class="span-delete-btn">
+                        <a href="#" class="btn btn-primary btn-show-delete-confirm">Delete</a>
+                    </span>
+                    <span class="span-delete-confirm" style="display:none">
+                        <span>Are you sure you want to delete user?</span>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                        <a href="#" class="btn btn-primary  btn-hide-delete-confirm">No</a>
+                    </span>
                 </form>
             </div>
         </div>
     }
+}
+@section Scripts{
+    <script>
+        $(function() {
+            $('.btn-show-delete-confirm').click(function() {
+                $(this).parent('.span-delete-btn').next('.span-delete-confirm').show();                
+                $(this).parent('.span-delete-btn').hide();
+                return false;
+            });
+            $('.btn-hide-delete-confirm').click(function() {
+                $(this).parent('.span-delete-confirm').prev('.span-delete-btn').show();
+                $(this).parent('.span-delete-confirm').hide();
+                return false;
+            });
 
+        });
+    </script>
 }

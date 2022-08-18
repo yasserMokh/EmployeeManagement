@@ -11,14 +11,14 @@
             <input type="hidden" asp-for="Id" />
         </div>
     </div>
-     <div class="form-group row">
+    <div class="form-group row">
         <label asp-for="UserName" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input asp-for="UserName" class="form-control" />
             <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
     </div>
-     <div class="form-group row">
+    <div class="form-group row">
         <label asp-for="Email" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input asp-for="Email" class="form-control" />
@@ -26,7 +26,7 @@
         </div>
     </div>
     <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group row">        
+    <div class="form-group row">
         <div class="col-sm-10">
             <button type="submit" class="btn btn-primary">Update</button>
             <a asp-controller="admin" asp-action="listusers" class="btn btn-primary">Cancel</a>
@@ -41,33 +41,43 @@
         @if (!Model.Roles.Any())
         {
             <h5 class="card-title">None at the moment.</h5>
-        }else{
-            foreach(var role in Model.Roles)
+        }
+        else
+        {
+            foreach (var role in Model.Roles)
             {
                 <h5 class="card-title">@role</h5>
             }
         }
     </div>
     <div class="card-footer">
-        <a asp-controller="admin" asp-action="index" class="btn btn-primary" style="width:auto">Manage Roles</a>    
+        <a asp-controller="admin" asp-action="index" class="btn btn-primary" style="width:auto">Manage Roles</a>
     </div>
 </div>
 <div class="card mt-3">
     <div class="card-header">
-       <h3>User Claims</h3>
+        <h3>User Claims</h3>
     </div>
     <div class="card-body">
         @if (!Model.Claims.Any())
         {
             <h5 class="card-title">None at the moment.</h5>
-        }else{
-            foreach(var claim in Model.Claims)
+        }
+        else
+        {
+            foreach (var claim in Model.Claims)
             {
                 <h5 class="card-title">@claim</h5>
             }
         }
     </div>
     <div class="card-footer">
-        <a asp-controller="admin" asp-action="index" class="btn btn-primary" style="width:auto">Manage Claims</a>    
+        <a asp-controller="admin" asp-action="index" class="btn btn-primary" style="width:auto">Manage Claims</a>
     </div>
 </div>
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScripts" />
+    }
+    }
