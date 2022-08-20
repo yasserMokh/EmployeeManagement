@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Web.Models.Enums;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace EmployeeManagement.Web.Models
 {
@@ -16,6 +17,9 @@ namespace EmployeeManagement.Web.Models
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();            
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(c => c.GetForeignKeys())){
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
     }
 }

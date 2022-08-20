@@ -104,6 +104,27 @@ namespace EmployeeManagement.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteRole(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            if (role == null)
+            {
+                return NotFound();
+            }
+            var result = await _roleManager.DeleteAsync(role);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("index", "admin");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View("index");
+        }
+
         [HttpGet]
         public async Task<IActionResult> EditUsersInRole(string id)
         {

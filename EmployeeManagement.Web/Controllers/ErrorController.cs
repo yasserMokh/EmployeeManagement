@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Web.Controllers
 {
@@ -25,6 +26,10 @@ namespace EmployeeManagement.Web.Controllers
         {
             //Retreive exception details
             var exceptionHandlerFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+            //if(exceptionHandlerFeature?.Error is DbUpdateException)
+            //{
+            //    //if(exceptionHandlerFeature.Error.InnerException is foreign
+            //}
             return View();
         }
     }

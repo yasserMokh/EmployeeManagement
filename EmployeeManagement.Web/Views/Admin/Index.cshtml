@@ -13,19 +13,19 @@
             <h5 class="card-title">
                 Use the button below to create a role
             </h5>
-             <a asp-controller="Admin" asp-action="CreateRole"
-       class="btn btn-primary" style="width:auto">
-            Create Role
-        </a>
-        </div>       
+            <a asp-controller="Admin" asp-action="CreateRole"
+           class="btn btn-primary" style="width:auto">
+                Create Role
+            </a>
+        </div>
     </div>
 }
 else
 {
-     <a asp-controller="Admin" asp-action="CreateRole"
-       class="btn btn-primary mb-3" style="width:auto">
-            Create Role
-        </a>
+    <a asp-controller="Admin" asp-action="CreateRole"
+   class="btn btn-primary mb-3" style="width:auto">
+        Create Role
+    </a>
     foreach (var role in Model)
     {
         <div class="card mb-3">
@@ -36,12 +36,37 @@ else
                 <h5 class="card-title">@role.Name</h5>
             </div>
             <div class="card-footer">
-                <a asp-controller="admin" asp-action="editrole" asp-route-id="@role.Id"
-           class="btn btn-primary">Edit</a>
-                <a asp-controller="admin" asp-action="deleterole" asp-route-id="@role.Id"
-           class="btn btn-primary">Delete</a>
+                <form method="post" asp-controller="admin" asp-action="deleterole" asp-route-id="@role.Id">
+                    <a asp-controller="admin" asp-action="editrole" asp-route-id="@role.Id"
+               class="btn btn-primary">Edit</a>
+                                   <span class="span-delete-btn">
+                        <a href="#" class="btn btn-primary btn-show-delete-confirm">Delete</a>
+                    </span>
+                    <span class="span-delete-confirm" style="display:none">
+                        <span>Are you sure you want to delete role?</span>
+                        <button type="submit" class="btn btn-danger">Yes</button>
+                        <a href="#" class="btn btn-primary  btn-hide-delete-confirm">No</a>
+                    </span>
+                </form>
             </div>
         </div>
     }
-
 }
+
+@section Scripts{
+    <script>
+        $(function() {
+            $('.btn-show-delete-confirm').click(function() {
+                $(this).parent('.span-delete-btn').next('.span-delete-confirm').show();
+                $(this).parent('.span-delete-btn').hide();
+                return false;
+            });
+            $('.btn-hide-delete-confirm').click(function() {
+                $(this).parent('.span-delete-confirm').prev('.span-delete-btn').show();
+                $(this).parent('.span-delete-confirm').hide();
+                return false;
+            });
+
+        });
+    </script>
+    }
