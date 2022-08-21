@@ -38,6 +38,11 @@ namespace EmployeeManagement.Web
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+            });
+
             //services.AddMockRepositories();
             services.AddRepositories();
         }
@@ -74,13 +79,13 @@ namespace EmployeeManagement.Web
 
 
             app.UseStaticFiles();
-            
+
             app.UseAuthentication();
 
             app.UseRouting();
 
             app.UseAuthorization();
-           
+
 
             app.UseEndpoints(endpoints =>
             {
