@@ -138,10 +138,10 @@ namespace EmployeeManagement.Web.Controllers
 
             var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name);
 
-            var users = usersInRole.Select(u => new UserRoleViewModel() { UserId = u.Id, UserName = u.UserName, IsInRole = true }).ToList();
+            var users = usersInRole.Select(u => new RoleUserViewModel() { UserId = u.Id, UserName = u.UserName, IsInRole = true }).ToList();
 
             var allUsers = _userManager.Users.ToList();
-            var extraUsers = allUsers.Except(usersInRole).Select(u => new UserRoleViewModel() { UserId = u.Id, UserName = u.UserName, IsInRole = false });
+            var extraUsers = allUsers.Except(usersInRole).Select(u => new RoleUserViewModel() { UserId = u.Id, UserName = u.UserName, IsInRole = false });
 
             users.AddRange(extraUsers);
 
@@ -151,7 +151,7 @@ namespace EmployeeManagement.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUsersInRole(string id, List<UserRoleViewModel> modelUsers)
+        public async Task<IActionResult> EditUsersInRole(string id, List<RoleUserViewModel> modelUsers)
         {
             var role = await _roleManager.FindByIdAsync(id);
             if (role == null)
@@ -265,5 +265,61 @@ namespace EmployeeManagement.Web.Controllers
             return View("ListUsers");
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> EditUserRoles(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.UserId = id;
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var roles = _roleManager.Roles.Select(r => new UserRoleViewModel() { RoleId = r.Id, RoleName = r.Name, IsInRole = false }).ToList();
+
+            roles.Where(r => userRoles.Contains(r.RoleName)).ToList().ForEach(r => r.IsInRole = true);
+
+            return View(roles.ToList());
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUserRoles(string id, List<UserRoleViewModel> modelRoles)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            foreach (var modelRole in modelRoles)
+            {
+                
+                if (userRoles.Contains(modelRole.RoleName))
+                {
+                    if (!modelRole.IsInRole)
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, modelRole.RoleName);
+                    }
+                }
+                else
+                {
+                    if (modelRole.IsInRole)
+                    {
+                        await _userManager.AddToRoleAsync(user, modelRole.RoleName);
+                    }
+                }
+            }
+
+            return RedirectToAction("edituser", "admin", new { id = id });
+
+
+        }
     }
 }
