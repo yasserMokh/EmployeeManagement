@@ -1,9 +1,11 @@
-﻿using EmployeeManagement.Web.ViewModels;
+﻿using EmployeeManagement.Web.Models;
+using EmployeeManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EmployeeManagement.Web.Controllers
@@ -320,6 +322,45 @@ namespace EmployeeManagement.Web.Controllers
             return RedirectToAction("edituser", "admin", new { id = id });
 
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUserClaims(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.UserId = id;
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+
+            var claims = ClaimsStore.AllClaims.Select(c => new UserClaimsViewModel() { ClaimType=c.Type, IsSelected=false  }).ToList();
+
+            claims.Where(c => userClaims.Any(uc=>uc.Type==c.ClaimType )).ToList().ForEach(c => c.IsSelected = true);
+
+            return View(claims.ToList());
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUserClaims(string id, List<UserClaimsViewModel> modelClaims)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userClaims = await _userManager.GetClaimsAsync(user);
+
+            await _userManager.RemoveClaimsAsync(user, userClaims);
+
+            await _userManager.AddClaimsAsync(user, modelClaims.Where(c=>c.IsSelected).Select(c=>new Claim(c.ClaimType, c.ClaimType)));
+
+            return RedirectToAction("edituser", "admin", new { id = id });
         }
     }
 }
