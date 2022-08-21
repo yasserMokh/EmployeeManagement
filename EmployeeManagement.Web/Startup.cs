@@ -40,7 +40,10 @@ namespace EmployeeManagement.Web
             });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("DeleteRolePolicy", policy => policy.RequireClaim("Delete Role"));
+                options.AddPolicy(PolicyStore.DeleteRole, policy => policy.RequireClaim(ClaimStore.DeleteRole));
+                options.AddPolicy(PolicyStore.EditRole, policy => policy.RequireClaim(ClaimStore.EditRole));
+                options.AddPolicy(PolicyStore.CreateRole, policy => policy.RequireClaim(ClaimStore.CreateRole));
+
             });
 
             //services.AddMockRepositories();

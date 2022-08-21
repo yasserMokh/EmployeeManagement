@@ -30,12 +30,14 @@ namespace EmployeeManagement.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = PolicyStore.CreateRole)]
         public IActionResult CreateRole()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Policy = PolicyStore.CreateRole)]
         public async Task<IActionResult> CreateRole(CreateRoleViewModel createRoleViewModel)
         {
             if (ModelState.IsValid)
@@ -56,6 +58,7 @@ namespace EmployeeManagement.Web.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = PolicyStore.EditRole)]
         public async Task<IActionResult> EditRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -80,6 +83,7 @@ namespace EmployeeManagement.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = PolicyStore.EditRole)]
         public async Task<IActionResult> EditRole(EditRoleViewModel model)
         {
             if (ModelState.IsValid)
@@ -107,7 +111,7 @@ namespace EmployeeManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy="DeleteRolePolicy")]
+        [Authorize(Policy= PolicyStore.DeleteRole)]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await _roleManager.FindByIdAsync(id);
@@ -338,7 +342,7 @@ namespace EmployeeManagement.Web.Controllers
 
             var userClaims = await _userManager.GetClaimsAsync(user);
 
-            var claims = ClaimsStore.AllClaims.Select(c => new UserClaimsViewModel() { ClaimType=c.Type, IsSelected=false  }).ToList();
+            var claims = ClaimStore.AllClaims.Select(c => new UserClaimsViewModel() { ClaimType=c.Type, IsSelected=false  }).ToList();
 
             claims.Where(c => userClaims.Any(uc=>uc.Type==c.ClaimType )).ToList().ForEach(c => c.IsSelected = true);
 
