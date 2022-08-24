@@ -40,10 +40,15 @@ namespace EmployeeManagement.Web
             });
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(PolicyStore.DeleteRole, policy => policy.RequireClaim(ClaimStore.DeleteRole));
-                options.AddPolicy(PolicyStore.EditRole, policy => policy.RequireClaim(ClaimStore.EditRole));
-                options.AddPolicy(PolicyStore.CreateRole, policy => policy.RequireClaim(ClaimStore.CreateRole));
-
+                options.AddPolicy(PolicyStore.DeleteRole, policy => policy.RequireAssertion(context =>
+                    (context.User.IsInRole("Admin") && context.User.HasClaim(c => c.Type == ClaimStore.DeleteRole)) || context.User.IsInRole("Super Admin")
+                ));
+                options.AddPolicy(PolicyStore.EditRole, policy => policy.RequireAssertion(context =>
+                    (context.User.IsInRole("Admin") && context.User.HasClaim(c => c.Type == ClaimStore.EditRole)) || context.User.IsInRole("Super Admin")
+                ));
+                options.AddPolicy(PolicyStore.CreateRole, policy => policy.RequireAssertion(context =>
+                    (context.User.IsInRole("Admin") && context.User.HasClaim(c => c.Type == ClaimStore.CreateRole)) || context.User.IsInRole("Super Admin")
+                ));
             });
 
             //services.AddMockRepositories();
